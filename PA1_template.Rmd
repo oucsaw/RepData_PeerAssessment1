@@ -26,7 +26,7 @@ minute intervals each day.
 
 Before we start, we set some global options that will show the R code
 embedded into the document, rather than the default of not displaying
-it. We also take this oppertunity to load some R libraries that will
+it. We also take this opportunity to load some R libraries that will
 be required
 
 ```{r globaloptions, echo=TRUE}
@@ -66,7 +66,7 @@ if ( ! file.exists( dataDirectory ) ) {
 unzip(dataZipFile, exdir=dataDirectory, overwrite=TRUE)
 ```
 
-We now load this comma seperated file, which has a header, into R
+We now load this comma separated file, which has a header, into R
 
 ```{r load}
 
@@ -87,7 +87,7 @@ activityData$date <- as.Date(activityData$date, '%Y-%m-%d')
 
 We start off by looking at the data, and ignoring any missing values
 that are present. Firstly, we group the data so that each day can be
-considered seperately, and then total the number of steps for each
+considered separately, and then total the number of steps for each
 day.
 
 ```{r group-by-day-sum-steps}
@@ -104,7 +104,7 @@ stepsDayMedian <- median(activityDay$steps)
 We now plot a histogram of the number of steps taken per day, and also
 plot lines for the mean steps per day `r stepsDayMean` and median steps
 per day `r stepsDayMedian` which we calculated above. Given we have 61
-variables, we pick (somewhat arbitatirly) 20 bins.
+variables, we pick (somewhat arbitrarily) 20 bins.
 
 ```{r plot-steps-per-day-histogram}
 
@@ -129,13 +129,13 @@ plot_steps_histogram <- function( data , dataMean, dataMedian, title) {
 
 plot_steps_histogram(activityDay$steps,
                      stepsDayMean, stepsDayMedian,
-                     'Histograpm of steps per day from the activity data')
+                     'Histogram of steps per day from the activity data')
 ```
 
 ## What is the average daily activity pattern?
 
-We now foucs on the patterns within a day. As with the daily version,
-we will ignore any missing values in our calcuations. Firstly, we find
+We now focus on the patterns within a day. As with the daily version,
+we will ignore any missing values in our calculations. Firstly, we find
 the average of steps pre-interval over all the days within the sample
 period. 
 
@@ -173,13 +173,13 @@ maxInterval  <- activityIntervalMeanSorted[1,1]
 maxMeanSteps <- activityIntervalMeanSorted[1,2]
 
 ``` 
-This shows that the ```r maxInterval``` interval contains that maximun
-number  ```r maxMeanSteps``` of steps on average accross all the days.
+This shows that the ```r maxInterval``` interval contains that maximum
+number  ```r maxMeanSteps``` of steps on average across all the days.
 
 ## Imputing missing values
 
 We observe from the data file that there are a number of missing values
-for steps in our data set. We calculuate the total number of rows with
+for steps in our data set. We calculate the total number of rows with
 missing values using is.na to return a boolean vector which we sum
 (using the fact that TRUE will be cast to 1 and FALSE be cast to 0):
 
@@ -195,7 +195,7 @@ Thus we see that there are `r missingValues` rows with missing values.
 
 We now impute the missing values in our data set. Our strategy for
 this is replace each missing value by the mean value for that 5-minute
-interval. This is a straghtforwards stratery but seems to be a
+interval. This is a straightforwards strategy but seems to be a
 reasonable way to achieve this task.
 
 Firstly, we will split out the `activityData` data frame into the 
@@ -209,10 +209,10 @@ activityDate     <- activityData$date
 activityInterval <- activityData$interval
 ```
 
-New, we loop over the misisng values vector (which we reuse from the
+New, we loop over the missing values vector (which we reuse from the
 above), and when there is a missing value (i.e. when `na_value[idx]`
 is true) we update the `activitySteps` vector with the mean value
-for that interval that we cacluated above and then compute a check.
+for that interval that we calculated above and then compute a check.
 
 ```{r impute-into-new-data-frame-loop-fill-in}
 for(idx in seq_along(na_values) ) {
@@ -239,8 +239,8 @@ activityDataImputed <- data.frame(steps = activitySteps,
 
 ```
 
-We then (as in part 1 above) plot a historgram of the total number of
-steps per day, and calcuate the mea and median values:
+We then (as in part 1 above) plot a histogram of the total number of
+steps per day, and calculate the mean and median values:
 
 ```{r impute-group-by-day-sum-steps}
 
@@ -259,7 +259,7 @@ This allows us to plot these values in a histogram:
 
 plot_steps_histogram(activityDayImputed$steps,
                stepsDayImputedMean, stepsDayImputedMedian,
-              'Histograpm of steps per day from the imputed activity data')
+              'Histogram of steps per day from the imputed activity data')
 ```
 
 We note that filling in the missing values has changed the
