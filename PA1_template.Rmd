@@ -108,21 +108,28 @@ variables, we pick (somewhat arbitatirly) 20 bins.
 
 ```{r plot-steps-per-day-histogram}
 
-g <- ggplot(activityDay, aes(steps)) +
-     geom_histogram(bins=20, fill='steelblue') + 
-     geom_vline(xintercept=stepsDayMedian, aes(color=green)) + 
-     geom_vline(xintercept = stepsDayMean, aes(color=red)) +
-     labs(title = 'Histograpm of steps per day from the activity data') +
-     xlab('Steps per day')
+plot_steps_histogram <- function( data , dataMean, dataMedian, title) {
 
-g <- ggplot(activityDay, aes(steps)) +
-     geom_histogram(bins=20, fill='steelblue', show.legend = TRUE) + 
-     geom_vline(xintercept=stepsDayMedian, color='green', show.legend=TRUE) + 
-     geom_vline(xintercept = stepsDayMean, color='red', show.legend = TRUE) +
-     labs(title = 'Histograpm of steps per day from the activity data') +
-     xlab('Steps per day') + theme(legend.position = 'right')
+   hist(data, breaks=20, col = 'steelblue',
+       xlab = 'Steps per day', 
+       main = title
+   )
 
-print(g)
+   # Add lines for the mean and media
+   abline(v=dataMean, col='steelblue1', lwd=2)
+   abline(v=dataMedian, col='steelblue4', lwd=2)
+
+   # Add a legend
+   legend('topright', 
+          c('steelblue1', 'steelblue4'),
+          c('Mean steps', 'Median Steps'),
+          lwd = 2 )
+
+}
+
+plot_steps_histogram(activityDay$steps,
+                     stepsDayMean, stepsDayMedian,
+                     'Histograpm of steps per day from the activity data')
 ```
 
 ## What is the average daily activity pattern?
@@ -250,19 +257,16 @@ This allows us to plot these values in a histogram:
 
 ```{r imputed-plot-steps-per-day-histogram}
 
-g <- ggplot(activityDayImputed, aes(steps)) +
-     geom_histogram(bins=20, fill='steelblue') +
-     geom_vline(xintercept=stepsDayImputedMedian, aes(color=green)) +
-     geom_vline(xintercept = stepsDayImputedMean, aes(color=red)) +
-     labs(title = 'Histograpm of steps per day from the activity data') +
-     xlab('Steps per day')
-
-print(g)
+plot_steps_histogram(activityDayImputed$steps,
+               stepsDayImputedMean, stepsDayImputedMedian,
+              'Histograpm of steps per day from the imputed activity data')
 ```
 
 We note that filling in the missing values has changed the
-the mean from `r stepsDayMean` to `r stepsDayImputedMean`. The median
-has also changed from `r stepsDayMedian` to `r stepsDayImputedMedian`.
+the mean from `r stepsDayMean` to `r stepsDayImputedMean` (an increase
+of `r stepsDayImputedMean - stepsDayMean`).  The median
+has also changed from `r stepsDayMedian` to `r stepsDayImputedMedian`
+(an increase of `r stepsDayImputedMedian - stepsDayMedian`)
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -322,3 +326,4 @@ weekday_weekend_plot <- ggplot( activityWeekDayEndImputed,
                                 xlab('Interval') + ylab('Mean steps')
 print(weekday_weekend_plot)
 ```
+
